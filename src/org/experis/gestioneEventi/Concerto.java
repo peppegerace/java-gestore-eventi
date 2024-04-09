@@ -49,4 +49,5 @@ public class Concerto extends Evento{
     public String toString() {
         return getTitolo() + "\n" + getOraDataFormattata() + "\n" + getPrezzoFormattato();
     }
+
 }
