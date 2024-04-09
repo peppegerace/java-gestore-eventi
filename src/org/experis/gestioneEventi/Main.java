@@ -4,24 +4,11 @@ package org.experis.gestioneEventi;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.Arrays;
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
         Scanner scan = new Scanner(System.in);
-
-//        System.out.print("Inserire titolo evento: ");
-//        String titolo = scan.nextLine();
-//
-//        System.out.print("Inserire data evento (formato yyyy-mm-dd): ");
-//        LocalDate data = LocalDate.parse(scan.nextLine());
-//
-//        System.out.print("Inserire la capienza: ");
-//        int capienza = Integer.parseInt(scan.nextLine());
-//
-//        Evento concerto = new Evento(titolo, data, capienza);
-//        System.out.println(concerto);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
         String titolo = "";
@@ -30,6 +17,7 @@ public class Main {
 
         boolean datiValidi = false;
 
+        // prendo i dati dall'utente per creare un evento
         while (!datiValidi) {
             try {
                 System.out.print("Inserire titolo evento: ");
@@ -60,11 +48,60 @@ public class Main {
             }
         }
 
+        // creo il nuovo evento con i dati raccolti
         Evento event = new Evento(titolo, data, capienza);
         System.out.println("-----------------------------------");
         System.out.println("Evento Creato!");
         System.out.println("-----------------------------------");
         System.out.println(event);
+        System.out.println("-----------------------------------");
+
+        // chiedo all'utente se vuole effettuare una prenotazione
+        boolean prenotazione = false;
+        int postiPrenotati = 0;
+        int postiDisponibili = 0;
+        while (!prenotazione) {
+            System.out.print("Vuoi effettuare una prenotazione? (sì/no): ");
+            String rispostaPrenotazione = scan.nextLine().toLowerCase();
+
+            if (rispostaPrenotazione.equals("si")) {
+
+                boolean inputValido = false;
+                while (!inputValido) {
+                    System.out.print("Quanti posti vuoi prenotare? ");
+                    String postiDaPrenotare = scan.nextLine();
+                    try {
+                        postiPrenotati = Integer.parseInt(postiDaPrenotare);
+                        if (postiPrenotati <= 0) {
+                            throw new IllegalArgumentException("Il numero di posti deve essere maggiore di 0");
+                        }
+                        inputValido = true;
+                    } catch (NumberFormatException e) {
+                        System.out.println("Errore: Formato non valido. Inserisvi un numero maggiore di 0");
+                    } catch (IllegalArgumentException e) {
+                        System.out.println("Errore: " + e.getMessage());
+                    }
+                }
+                try {
+                    event.prenota(postiPrenotati);
+                    System.out.println(postiPrenotati + " posti prenotati");
+                    postiDisponibili = capienza - postiPrenotati;
+                    System.out.println("Posti ancora disponibili: " + postiDisponibili);
+                    prenotazione = true;
+                } catch (IllegalArgumentException e) {
+                    System.out.println("Errore durante la prenotazione: " + e.getMessage());
+                }
+            } else if (rispostaPrenotazione.equals("no")) {
+                System.out.println("Goodbye!");
+                prenotazione = true;
+            } else {
+                System.out.println("Risposta non valida. Rispondi 'si' o 'no'.");
+            }
+        }
+
+        System.out.println("-----------------------------------");
+        System.out.println(event);
+        System.out.println("Posti disponibili: " + postiDisponibili);
         System.out.println("-----------------------------------");
 
         scan.close();
