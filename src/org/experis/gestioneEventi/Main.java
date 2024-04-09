@@ -2,6 +2,7 @@ package org.experis.gestioneEventi;
 
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.Arrays;
 import java.util.Scanner;
@@ -21,7 +22,7 @@ public class Main {
 //
 //        Evento concerto = new Evento(titolo, data, capienza);
 //        System.out.println(concerto);
-
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
         String titolo = "";
         LocalDate data = null;
@@ -37,8 +38,9 @@ public class Main {
                     throw new IllegalArgumentException("Il titolo non può essere vuoto");
                 }
 
-                System.out.print("Inserire data evento (formato yyyy-mm-dd): ");
-                data = LocalDate.parse(scan.nextLine());
+                System.out.print("Inserire data evento (formato dd-mm-yyyy): ");
+                String inputData = scan.nextLine();
+                data = LocalDate.parse(inputData, formatter);
                 if (data.isBefore(LocalDate.now())) {
                     throw new IllegalArgumentException("La data dell'evento è già passata");
                 }
@@ -59,7 +61,11 @@ public class Main {
         }
 
         Evento event = new Evento(titolo, data, capienza);
+        System.out.println("-----------------------------------");
+        System.out.println("Evento Creato!");
+        System.out.println("-----------------------------------");
         System.out.println(event);
+        System.out.println("-----------------------------------");
 
         scan.close();
     }

@@ -1,6 +1,7 @@
 package org.experis.gestioneEventi;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class Evento {
     // attributi
@@ -52,7 +53,9 @@ public class Evento {
     // metodi
     @Override
     public String toString() {
-        return "Titolo: " + titolo + "\n" + "Data: " + data + "\n" + "Capienza: " + capienza + "\n" + "Posti prenotati: " + postiPrenotati;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        String dataFormattata = data.format(formatter);
+        return "Titolo: " + titolo + "\n" + "Data: " + dataFormattata + "\n" + "Capienza: " + capienza + "\n" + "Posti prenotati: " + postiPrenotati;
     }
 
     public void prenota(int postiDaPrenotare) {
