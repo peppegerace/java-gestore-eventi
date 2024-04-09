@@ -23,7 +23,7 @@ public class Main {
                 System.out.print("Inserire titolo evento: ");
                 titolo = scan.nextLine();
                 if (titolo.isEmpty()) {
-                    throw new IllegalArgumentException("Il titolo non può essere vuoto");
+                    throw new IllegalArgumentException("Il titolo non può essere vuoto.");
                 }
 
                 System.out.print("Inserire data evento (formato dd-mm-yyyy): ");
@@ -77,7 +77,7 @@ public class Main {
                         }
                         inputValido = true;
                     } catch (NumberFormatException e) {
-                        System.out.println("Errore: Formato non valido. Inserisvi un numero maggiore di 0");
+                        System.out.println("Errore: Formato non valido. Inserisci un numero maggiore di 0");
                     } catch (IllegalArgumentException e) {
                         System.out.println("Errore: " + e.getMessage());
                     }
@@ -97,6 +97,48 @@ public class Main {
             } else {
                 System.out.println("Risposta non valida. Rispondi 'si' o 'no'.");
             }
+        }
+
+        // stampo a video il numero di posti prenotati e quelli disponibili
+        System.out.println("-----------------------------------");
+        System.out.println(event);
+        System.out.println("Posti disponibili: " + postiDisponibili);
+        System.out.println("-----------------------------------");
+
+        // // chiedo all'utente se vuole disdire una prenotazione effettuata
+        boolean disdetta = false;
+        while (!disdetta) {
+            System.out.println("Vuoi disdire una prenotazione? ");
+            String rispostaDisdetta = scan.nextLine().toLowerCase();
+
+            if (rispostaDisdetta.equals("si")) {
+                boolean inputValido = false;
+                while (!inputValido) {
+                    System.out.println("Quanti posti vuoi disdire? ");
+                    String postiDaDisdire = scan.nextLine();
+                    try {
+                        int postiDisdetti = Integer.parseInt(postiDaDisdire);
+                        if (postiDisdetti <= 0) {
+                            throw new IllegalArgumentException("Il numero di posti deve essere maggiore di 0");
+                        }
+                        event.disdici(postiDisdetti);
+                        System.out.println(postiDisdetti + " posti disdetti");
+                        postiDisponibili = capienza - event.getPostiPrenotati();
+                        System.out.println("Posti ancora disponibili: " + postiDisponibili);
+                        inputValido = true;
+                    } catch (NumberFormatException e) {
+                        System.out.println("Errore: Formato non valido. Inserisci u numero maggiore di 0");
+                    } catch (IllegalArgumentException e) {
+                        System.out.println("Errore durante la disdetta: " + e.getMessage());
+                    }
+                }
+            } else if (rispostaDisdetta.equals("no")) {
+                System.out.println("Goodbye");
+                disdetta = true;
+            } else {
+                System.out.println("Risposta non valida. Rispondi 'si' o 'no'");
+            }
+
         }
 
         System.out.println("-----------------------------------");
